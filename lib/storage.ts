@@ -1,5 +1,4 @@
 import { redis } from "@/lib/redis"
-import * as localStorage from "@/lib/local-storage"
 
 export type ProfileData = {
   profileImage: string
@@ -35,10 +34,24 @@ export type AboutSection = {
   content: string
 }
 
+// Dynamic import for local storage (only in Node.js environment)
+async function getLocalStorage() {
+  if (typeof window !== 'undefined') return null // Browser environment
+  try {
+    const localStorage = await import('@/lib/local-storage')
+    return localStorage
+  } catch {
+    return null // If import fails, fall back to Redis
+  }
+}
+
 export async function getSection<T>(key: string, fallback: T): Promise<T> {
-  // Use local storage in development mode
+  // Use local storage in development mode with Node.js
   if (process.env.NODE_ENV === 'development') {
-    return localStorage.getSection(key, fallback)
+    const localStorage = await getLocalStorage()
+    if (localStorage) {
+      return localStorage.getSection(key, fallback)
+    }
   }
 
   let raw: any
@@ -64,9 +77,12 @@ export async function getSection<T>(key: string, fallback: T): Promise<T> {
 }
 
 export async function setSection<T>(key: string, value: T): Promise<void> {
-  // Use local storage in development mode
+  // Use local storage in development mode with Node.js
   if (process.env.NODE_ENV === 'development') {
-    return localStorage.setSection(key, value)
+    const localStorage = await getLocalStorage()
+    if (localStorage) {
+      return localStorage.setSection(key, value)
+    }
   }
 
   await redis.set(key, JSON.stringify(value))

@@ -1,5 +1,4 @@
 import { redis } from "@/lib/redis"
-import * as localAudit from "@/lib/local-audit"
 
 export type AuditEntry = {
   id: string
@@ -11,10 +10,24 @@ export type AuditEntry = {
 const AUDIT_KEY = "audit:entries"
 const MAX_ENTRIES = 500
 
+// Dynamic import for local audit (only in Node.js environment)
+async function getLocalAudit() {
+  if (typeof window !== 'undefined') return null // Browser environment
+  try {
+    const localAudit = await import('@/lib/local-audit')
+    return localAudit
+  } catch {
+    return null // If import fails, fall back to Redis
+  }
+}
+
 export async function logAudit(action: string, meta?: Record<string, unknown>) {
-  // Use local audit in development mode
+  // Use local audit in development mode with Node.js
   if (process.env.NODE_ENV === 'development') {
-    return localAudit.logAudit(action, meta)
+    const localAudit = await getLocalAudit()
+    if (localAudit) {
+      return localAudit.logAudit(action, meta)
+    }
   }
 
   const entry: AuditEntry = {
@@ -29,9 +42,12 @@ export async function logAudit(action: string, meta?: Record<string, unknown>) {
 }
 
 export async function getAudit(limit = 100): Promise<AuditEntry[]> {
-  // Use local audit in development mode
+  // Use local audit in development mode with Node.js
   if (process.env.NODE_ENV === 'development') {
-    return localAudit.getAudit(limit)
+    const localAudit = await getLocalAudit()
+    if (localAudit) {
+      return localAudit.getAudit(limit)
+    }
   }
 
   const raw = await redis.lrange<string>(AUDIT_KEY, 0, Math.max(0, limit - 1))
