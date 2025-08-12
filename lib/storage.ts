@@ -1,4 +1,5 @@
 import { redis } from "@/lib/redis"
+import * as localStorage from "@/lib/local-storage"
 
 export type ProfileData = {
   profileImage: string
@@ -35,8 +36,14 @@ export type AboutSection = {
 }
 
 export async function getSection<T>(key: string, fallback: T): Promise<T> {
+  // Use local storage in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return localStorage.getSection(key, fallback)
+  }
+
+  let raw: any
   try {
-    const raw = await redis.get(key)
+    raw = await redis.get(key)
     if (!raw) return fallback
     
     // If it's already an object, return it directly
@@ -57,5 +64,10 @@ export async function getSection<T>(key: string, fallback: T): Promise<T> {
 }
 
 export async function setSection<T>(key: string, value: T): Promise<void> {
+  // Use local storage in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return localStorage.setSection(key, value)
+  }
+
   await redis.set(key, JSON.stringify(value))
 }

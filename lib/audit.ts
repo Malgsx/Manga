@@ -1,4 +1,5 @@
 import { redis } from "@/lib/redis"
+import * as localAudit from "@/lib/local-audit"
 
 export type AuditEntry = {
   id: string
@@ -11,6 +12,11 @@ const AUDIT_KEY = "audit:entries"
 const MAX_ENTRIES = 500
 
 export async function logAudit(action: string, meta?: Record<string, unknown>) {
+  // Use local audit in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return localAudit.logAudit(action, meta)
+  }
+
   const entry: AuditEntry = {
     id: crypto.randomUUID(),
     ts: Date.now(),
@@ -23,6 +29,11 @@ export async function logAudit(action: string, meta?: Record<string, unknown>) {
 }
 
 export async function getAudit(limit = 100): Promise<AuditEntry[]> {
+  // Use local audit in development mode
+  if (process.env.NODE_ENV === 'development') {
+    return localAudit.getAudit(limit)
+  }
+
   const raw = await redis.lrange<string>(AUDIT_KEY, 0, Math.max(0, limit - 1))
   return raw
     .map((s) => {
