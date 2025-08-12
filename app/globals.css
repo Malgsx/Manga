@@ -1,0 +1,510 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 255 255 255;
+    --foreground: 0 0 0;
+
+    --card: 255 255 255;
+    --card-foreground: 0 0 0;
+
+    --popover: 255 255 255;
+    --popover-foreground: 0 0 0;
+
+    --primary: 0 0 0;
+    --primary-foreground: 255 255 255;
+
+    --secondary: 245 245 245;
+    --secondary-foreground: 0 0 0;
+
+    --muted: 245 245 245;
+    --muted-foreground: 115 115 115;
+
+    --accent: 245 245 245;
+    --accent-foreground: 0 0 0;
+
+    --destructive: 0 0 0;
+    --destructive-foreground: 255 255 255;
+
+    --border: 0 0 0;
+    --input: 245 245 245;
+    --ring: 0 0 0;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0 0;
+    --foreground: 255 255 255;
+
+    --card: 0 0 0;
+    --card-foreground: 255 255 255;
+
+    --popover: 0 0 0;
+    --popover-foreground: 255 255 255;
+
+    --primary: 255 255 255;
+    --primary-foreground: 0 0 0;
+
+    --secondary: 38 38 38;
+    --secondary-foreground: 255 255 255;
+
+    --muted: 38 38 38;
+    --muted-foreground: 163 163 163;
+
+    --accent: 38 38 38;
+    --accent-foreground: 255 255 255;
+
+    --destructive: 255 255 255;
+    --destructive-foreground: 0 0 0;
+
+    --border: 255 255 255;
+    --input: 38 38 38;
+    --ring: 255 255 255;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.05) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  .dark body {
+    background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  }
+}
+
+@layer components {
+  .font-comic {
+    font-family: "Comic Neue", "Comic Sans MS", cursive;
+    font-weight: 700;
+  }
+
+  .comic-panel {
+    position: relative;
+    overflow: hidden;
+    background: black;
+    border: 4px solid white !important;
+  }
+
+  .dark .comic-panel {
+    background: black;
+    border: 4px solid white !important;
+  }
+
+  .speech-bubble {
+    background: black !important;
+    border: 3px solid white !important;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .dark .speech-bubble {
+    background: black !important;
+    border: 3px solid white !important;
+  }
+
+  .speech-bubble:hover {
+    background: rgba(128, 128, 128, 0.3) !important;
+  }
+
+  .dark .speech-bubble:hover {
+    background: rgba(128, 128, 128, 0.3) !important;
+  }
+
+  .speech-bubble::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: inherit;
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    bottom: -10px;
+    left: 20px;
+    transform: rotate(45deg);
+  }
+
+  .dark .speech-bubble::after {
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+  }
+
+  /* Clean manga speech bubble styles - no borders */
+  .manga-speech-bubble-clean {
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .manga-speech-bubble-clean:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .manga-contact-bubble-clean {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .manga-contact-bubble-clean:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .manga-thought-bubble-clean {
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Original manga speech bubble styles with borders */
+  .manga-speech-bubble {
+    border-radius: 50px;
+    position: relative;
+    box-shadow: 8px 8px 0px 0px rgba(255, 255, 255, 1);
+    transition: all 0.3s ease;
+  }
+
+  .dark .manga-speech-bubble {
+    box-shadow: 8px 8px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  .manga-speech-bubble::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-top: 40px solid white;
+    bottom: -35px;
+    left: 50px;
+    transform: rotate(-15deg);
+  }
+
+  .dark .manga-speech-bubble::after {
+    border-top-color: white;
+  }
+
+  .manga-speech-bubble::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 33px solid transparent;
+    border-right: 33px solid transparent;
+    border-top: 43px solid black;
+    bottom: -39px;
+    left: 47px;
+    transform: rotate(-15deg);
+    z-index: -1;
+  }
+
+  .dark .manga-speech-bubble::before {
+    border-top-color: black;
+  }
+
+  .manga-contact-bubble {
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .manga-contact-bubble:hover {
+    transform: scale(1.05);
+    background: rgba(128, 128, 128, 0.2) !important;
+  }
+
+  .manga-thought-bubble {
+    border-radius: 30px;
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .manga-thought-bubble::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: 3px solid black;
+    border-radius: 50%;
+    bottom: -20px;
+    left: 20px;
+  }
+
+  .dark .manga-thought-bubble::after {
+    background: white;
+    border-color: black;
+  }
+
+  .manga-thought-bubble::before {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border: 3px solid black;
+    border-radius: 50%;
+    bottom: -35px;
+    left: 15px;
+  }
+
+  .dark .manga-thought-bubble::before {
+    background: white;
+    border-color: black;
+  }
+
+  .manga-speech-bubble:hover {
+    transform: translateY(-5px);
+    box-shadow: 12px 12px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  .dark .manga-speech-bubble:hover {
+    box-shadow: 12px 12px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  .manga-page-layout {
+    display: grid;
+    grid-template-rows: 2fr 3fr;
+    gap: 1rem;
+    height: 85vh;
+    min-height: 650px;
+  }
+
+  .top-panel {
+    grid-column: 1 / -1;
+    min-height: 200px;
+  }
+
+  .bottom-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+  }
+
+  .left-panel {
+    grid-row: 1 / -1;
+  }
+
+  .right-column {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .manga-panel {
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 8px 8px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  .dark .manga-panel {
+    box-shadow: 8px 8px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  .manga-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 12px 12px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  .dark .manga-panel:hover {
+    box-shadow: 12px 12px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  /* Technology Brand Colors */
+  .tech-nextjs {
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #000000;
+  }
+
+  .tech-typescript {
+    background-color: #3178c6;
+    color: #ffffff;
+    border-color: #3178c6;
+  }
+
+  .tech-tailwind {
+    background-color: #06b6d4;
+    color: #ffffff;
+    border-color: #06b6d4;
+  }
+
+  .tech-framer {
+    background-color: #ff0055;
+    color: #ffffff;
+    border-color: #ff0055;
+  }
+
+  .tech-react {
+    background-color: #61dafb;
+    color: #000000;
+    border-color: #61dafb;
+  }
+
+  .tech-javascript {
+    background-color: #f7df1e;
+    color: #000000;
+    border-color: #f7df1e;
+  }
+
+  .tech-python {
+    background-color: #3776ab;
+    color: #ffffff;
+    border-color: #3776ab;
+  }
+
+  .tech-vue {
+    background-color: #4fc08d;
+    color: #ffffff;
+    border-color: #4fc08d;
+  }
+
+  .tech-html {
+    background-color: #e34f26;
+    color: #ffffff;
+    border-color: #e34f26;
+  }
+
+  .tech-css {
+    background-color: #1572b6;
+    color: #ffffff;
+    border-color: #1572b6;
+  }
+
+  .tech-node {
+    background-color: #339933;
+    color: #ffffff;
+    border-color: #339933;
+  }
+
+  .tech-mongodb {
+    background-color: #47a248;
+    color: #ffffff;
+    border-color: #47a248;
+  }
+
+  .tech-firebase {
+    background-color: #ffca28;
+    color: #000000;
+    border-color: #ffca28;
+  }
+
+  .tech-supabase {
+    background-color: #3ecf8e;
+    color: #ffffff;
+    border-color: #3ecf8e;
+  }
+
+  .tech-vercel {
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #000000;
+  }
+
+  .tech-github {
+    background-color: #181717;
+    color: #ffffff;
+    border-color: #181717;
+  }
+
+  @media (max-width: 768px) {
+    .manga-page-layout {
+      grid-template-rows: auto auto;
+      height: auto;
+      min-height: auto;
+    }
+
+    .bottom-section {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+    }
+
+    .left-panel {
+      grid-row: auto;
+      order: 1;
+    }
+
+    .right-column {
+      order: 2;
+      grid-template-rows: auto auto;
+    }
+
+    .top-panel {
+      min-height: 200px;
+    }
+  }
+
+  /* Manga-style halftone patterns */
+  .halftone-bg {
+    background-image: radial-gradient(circle, white 1px, transparent 1px);
+    background-size: 8px 8px;
+    opacity: 0.1;
+  }
+
+  .dark .halftone-bg {
+    background-image: radial-gradient(circle, white 1px, transparent 1px);
+  }
+
+  /* Action lines effect */
+  .action-lines {
+    background-image: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%),
+      linear-gradient(-45deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+    background-size: 20px 20px;
+  }
+
+  .dark .action-lines {
+    background-image: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%),
+      linear-gradient(-45deg, transparent 40%, rgba(255, 255, 255, 0.1) 50%, transparent 60%);
+  }
+
+  /* Custom tab styles for black and white theme */
+  .manga-tabs [data-state="active"] {
+    background-color: white !important;
+    color: black !important;
+    border: 2px solid black !important;
+  }
+
+  .dark .manga-tabs [data-state="active"] {
+    background-color: black !important;
+    color: white !important;
+    border: 2px solid white !important;
+  }
+
+  .manga-tabs [data-state="inactive"] {
+    background-color: transparent !important;
+    color: black !important;
+    border: 2px solid black !important;
+  }
+
+  .dark .manga-tabs [data-state="inactive"] {
+    background-color: transparent !important;
+    color: white !important;
+    border: 2px solid white !important;
+  }
+
+  .manga-tabs .tabs-list {
+    background-color: transparent !important;
+    border: none !important;
+  }
+}
